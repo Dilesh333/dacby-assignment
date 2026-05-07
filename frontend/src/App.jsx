@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
+import ProtectedRoute from "./routes/ProtectedRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,7 +15,11 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/bookmarks" element={<Bookmarks />} />
+
+        {/* Protected routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/bookmarks" element={<Bookmarks />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

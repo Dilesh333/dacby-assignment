@@ -13,25 +13,34 @@ const allowedOrigins = [
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use(express.json());
+
+
+let isConnected = false;
+app.use(async (req, res, next) => {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+  next();
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/scrape", scrapeRoutes);
-
-// Connect to DB
-connectDB();
 
 // Local dev only
 if (process.env.NODE_ENV !== "production") {
@@ -41,5 +50,4 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// Export for Vercel serverless
 export default app;

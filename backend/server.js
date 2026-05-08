@@ -9,7 +9,7 @@ import storyRoutes from "./routes/storyRoutes.js";
 const app = express();
 
 const allowedOrigins = [
-  "http://localhost:5173",
+  process.env.DEV_CLIENT_URL,
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
@@ -29,8 +29,17 @@ app.use(
 app.use(express.json());
 
 
+app.get("/api/health", (req, res) => {
+  res.json({
+    status: "ok",
+    mongo: !!process.env.MONGO_URI,
+    env: process.env.NODE_ENV,
+  });
+});
+
+
 let isConnected = false;
-app.use(async (req, res, next) => {
+app.use(async (_req, _res, next) => {
   if (!isConnected) {
     await connectDB();
     isConnected = true;

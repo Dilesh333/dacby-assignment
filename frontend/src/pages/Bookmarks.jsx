@@ -24,7 +24,7 @@ function Bookmarks() {
 
   useEffect(() => {
     fetchBookmarks();
-  }, []);
+  }, [token]);
 
   const handleBookmark = async (storyId) => {
     try {
@@ -43,7 +43,7 @@ function Bookmarks() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f4]">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
 
         {/* Header */}
         <div className="mb-6">

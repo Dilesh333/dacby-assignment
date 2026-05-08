@@ -33,7 +33,7 @@ function Home() {
       const { data } = await API.get("/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setBookmarkedIds(data.bookmarks.map((b) => b._id || b));
+      setBookmarkedIds(data.bookmarks.map((b) => b._id));
     } catch (err) {
       console.error("Failed to fetch bookmarks", err);
     }
@@ -56,7 +56,7 @@ function Home() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       // Update bookmarked IDs from the response
-      setBookmarkedIds(data.bookmarks.map((b) => b._id || b));
+      setBookmarkedIds(data.bookmarks.map((b) => b._id));
       toast.success(data.message);
     } catch (err) {
       toast.error("Failed to update bookmark");
@@ -65,7 +65,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f4]">
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
 
         {/* Header */}
         <div className="mb-6">

@@ -29,7 +29,7 @@ function Register() {
 
   return (
     <div className="min-h-screen bg-[#f5f5f4] flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-[#d6d3d1] p-8">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-[#d6d3d1] p-6 sm:p-8">
 
         {/* Header */}
         <div className="mb-8">

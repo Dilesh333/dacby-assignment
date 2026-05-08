@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import connectDB from "./config/db.js";
+import mongoose from "mongoose";
 import scrapeRoutes from "./routes/scrapeRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js";
@@ -28,23 +28,29 @@ app.use(
 
 app.use(express.json());
 
-
+// Health check
 app.get("/api/health", (req, res) => {
   res.json({
     status: "ok",
     mongo: !!process.env.MONGO_URI,
+    mongoState: mongoose.connection.readyState,
     env: process.env.NODE_ENV,
   });
 });
 
+// Serverless-safe DB connection
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return;
+  await mongoose.connect(process.env.MONGO_URI);
+};
 
-let isConnected = false;
 app.use(async (_req, _res, next) => {
-  if (!isConnected) {
+  try {
     await connectDB();
-    isConnected = true;
+    next();
+  } catch (err) {
+    next(err);
   }
-  next();
 });
 
 app.use("/api/auth", authRoutes);

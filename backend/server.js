@@ -51,12 +51,13 @@ const connectDB = async () => {
   await mongoose.connect(process.env.MONGO_URI);
 };
 
-app.use(async (_req, _res, next) => {
+app.use(async (_req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
-    next(err);
+    console.error("DB connection failed:", err.message);
+    res.status(503).json({ message: "Database unavailable", error: err.message });
   }
 });
 
